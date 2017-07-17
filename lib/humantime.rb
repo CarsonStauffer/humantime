@@ -12,6 +12,7 @@ class HumanTime
   
   # Parse an integer and return the string representation of a time
   def self.output int, options = {}
+    print "HumanTime.output(#{int}, #{options}): "
     str = []
     display = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
     
@@ -21,11 +22,13 @@ class HumanTime
     if int > ( YEAR - 1 ) && display.include?('years')
       years = int / YEAR
       int = int - ( years * YEAR )
-      display.delete 'minutes' 
-      display.delete 'seconds' 
-      display.delete 'hours'
+      # display.delete 'minutes'
+      # display.delete 'seconds'
+      # display.delete 'hours'
+      display = precision 'days'
       if options[:round_to] == GREATEST
-        display = display.slice 0..display.index('years')
+        # display = display.slice 0..display.index('years')
+        display = precision 'years'
       end
       
       if years.round == 1
@@ -44,7 +47,8 @@ class HumanTime
       display.delete 'seconds'
       display.delete 'hours'
       if options[:round_to] == GREATEST
-        display = display.slice 0..display.index('months')
+        # display = display.slice 0..display.index('months')
+        display = precision 'months'
       end
       
       if options[:round_to] == MONTH
@@ -69,7 +73,8 @@ class HumanTime
       display.delete 'minutes' 
       display.delete 'seconds'
       if options[:round_to] == GREATEST
-        display = display.slice 0..display.index('days')
+        # display = display.slice 0..display.index('days')
+        display = precision 'days'
       end
 
       if options[:round_to] == DAY
@@ -101,7 +106,8 @@ class HumanTime
       int = int - ( hours * HOUR )
       display.delete 'seconds'
       if options[:round_to] == GREATEST
-        display = display.slice 0..display.index('hours')
+        # display = display.slice 0..display.index('hours')
+        display = precision 'hours'
       end
       
       if options[:round_to] == HOUR
@@ -121,7 +127,8 @@ class HumanTime
       mins = int / MINUTE
       int = int - ( mins * MINUTE )
       if options[:round_to] == GREATEST
-        display = display.slice 0..display.index('minutes')
+        # display = display.slice 0..display.index('minutes')
+        display = precision 'minutes'
       end
       
       if options[:round_to] == MINUTE
@@ -162,6 +169,24 @@ class HumanTime
     end
     self.output diff, options
   end
+
+  # set the precision level printed
+  def self.precision precision
+    case precision
+      when 'years'
+        ['years']
+      when 'months'
+        ['years', 'months']
+      when 'days'
+        ['years', 'months', 'days']
+      when 'hours'
+        ['years', 'months', 'days', 'hours']
+      when 'minutes'
+        ['years', 'months', 'days', 'hours', 'minutes']
+      else
+        ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
+    end
+  end
     
   # From https://github.com/hpoydar/chronic_duration
   # For future parsing methods
@@ -199,3 +224,5 @@ class HumanTime
     }
   end
 end
+
+puts HumanTime.output 44, round_to: HumanTime::GREATEST
