@@ -101,10 +101,10 @@ To truncate everything except the greatest time denomination:
     
     >> t1 = Time.now
     => 2017-07-13 15:40:49 -0700 
-    >> t2 = Time.now + 3700
+    >> t2 = t1 + 3700
     => 2017-07-13 16:42:29 -0700 
     >> HumanTime.between t1, t2
-    => "1 hour 1 minute 40 seconds" 
+    => "1 hour 1 minute" 
     >> HumanTime.between t1, t2, { :round_to => HumanTime::GREATEST }
     => "1 hour" 
        
